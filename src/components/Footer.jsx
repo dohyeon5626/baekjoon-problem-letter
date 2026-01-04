@@ -13,8 +13,8 @@ const Footer = () => {
           <p className="text-xs text-slate-400 font-medium text-center md:text-left">Baekjoon Online Judge 문제 추천 구독 서비스</p>
         </div>
         <div className="flex items-center gap-6">
-          <div className="text-slate-400 hover:text-slate-900 transition-colors cursor-pointer"><Github className="w-5 h-5" /></div>
-          <div className="text-slate-400 hover:text-slate-900 transition-colors cursor-pointer"><Mail className="w-5 h-5" /></div>
+          <a href="https://github.com/dohyeon5626/baekjoon-problem-letter" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-slate-900 transition-colors cursor-pointer"><Github className="w-5 h-5" /></a>
+          <a href="mailto:baekjoon-problem-letter@dohyeon5626.com" className="text-slate-400 hover:text-slate-900 transition-colors cursor-pointer"><Mail className="w-5 h-5" /></a>
         </div>
       </div>
     </footer>

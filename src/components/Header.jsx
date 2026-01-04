@@ -25,8 +25,8 @@ const Header = ({ currentPage, navigateTo, isMenuOpen, setIsMenuOpen }) => {
       </div>
       {isMenuOpen && (
         <div className="md:hidden bg-white border-b border-slate-100 px-4 py-4 flex flex-col gap-2 shadow-lg animate-in slide-in-from-top-2">
-          <button onClick={() => navigateTo('home')} className={`w-full p-3 rounded-xl text-sm font-bold text-left transition-colors ${currentPage === 'home' ? 'bg-emerald-50 text-emerald-600' : 'text-slate-600 hover:bg-slate-50'}`}>구독 신청하기</button>
-          <button onClick={() => navigateTo('cancel')} className={`w-full p-3 rounded-xl text-sm font-bold text-left transition-colors ${currentPage === 'cancel' ? 'bg-red-50 text-red-600' : 'text-slate-600 hover:bg-slate-50'}`}>구독 취소하기</button>
+          <button onClick={() => navigateTo('home')} className={`w-full p-3 rounded-xl text-sm font-bold text-left transition-colors ${currentPage === 'home' ? 'bg-emerald-50 text-emerald-600' : 'text-slate-600 hover:bg-slate-50'}`}>구독하기</button>
+          <button onClick={() => navigateTo('cancel')} className={`w-full p-3 rounded-xl text-sm font-bold text-left transition-colors ${currentPage === 'cancel' ? 'bg-red-50 text-red-600' : 'text-slate-600 hover:bg-slate-50'}`}>취소하기</button>
         </div>
       )}
     </nav>
