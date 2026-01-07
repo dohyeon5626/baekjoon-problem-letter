@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Notification from './components/Notification';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -11,18 +11,26 @@ const App = () => {
   const [notification, setNotification] = useState(null);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  // 알림 시스템
-  const showNotification = (type, message) => {
-    setNotification({ type, message });
-    setTimeout(() => setNotification(null), 4000);
-  };
-
   // 페이지 이동 처리
-  const navigateTo = (page) => {
+  const navigateTo = useCallback((page) => {
     setCurrentPage(page);
     setIsSuccess(false);
     setIsMenuOpen(false);
     window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('reason') === 'unsubscribe') {
+      navigateTo('cancel');
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, [navigateTo]);
+
+  // 알림 시스템
+  const showNotification = (type, message) => {
+    setNotification({ type, message });
+    setTimeout(() => setNotification(null), 4000);
   };
 
   return (
