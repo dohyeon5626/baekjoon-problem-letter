@@ -1,32 +1,29 @@
 import React, { useState } from 'react';
 import { UserMinus, Loader2 } from 'lucide-react';
 import { validateEmail } from '../utils/emailValidator';
+import { cancelSubscription } from '../utils/subscription';
 
 const CancelPage = ({ showNotification }) => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleCancel = () => {
+  const handleCancel = async () => {
     if (!email) { showNotification('error', '이메일 주소를 입력해주세요.'); return; }
     if (!validateEmail(email)) { showNotification('error', '유효하지 않은 이메일 형식입니다.'); return; }
     setLoading(true);
-    setTimeout(() => {
-      try {
-        const stored = JSON.parse(localStorage.getItem('subscriptions') || '[]');
-        const filtered = stored.filter(sub => sub.email !== email);
-        if (stored.length === filtered.length) {
-          showNotification('error', '등록된 구독 정보를 찾을 수 없습니다.');
-        } else {
-          localStorage.setItem('subscriptions', JSON.stringify(filtered));
-          showNotification('success', '구독이 정상적으로 해지되었습니다.');
-          setEmail('');
-        }
-      } catch (error) {
-        showNotification('error', '처리 중 오류가 발생했습니다.');
-      } finally {
-        setLoading(false);
+    try {
+      const result = await cancelSubscription(email);
+      if (result.success) {
+        showNotification('success', result.message);
+        setEmail('');
+      } else {
+        showNotification('error', result.message);
       }
-    }, 800);
+    } catch (error) {
+      showNotification('error', '처리 중 오류가 발생했습니다.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

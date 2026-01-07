@@ -3,6 +3,7 @@ import {
   Clock, Hash, Calendar, Loader2, CheckCircle2, ExternalLink, 
   ChevronLeft, ChevronRight, Check
 } from 'lucide-react';
+import { addSubscription } from '../utils/subscription';
 import { validateEmail } from '../utils/emailValidator';
 
 const HomePage = ({ showNotification, isSuccess, setIsSuccess }) => {
@@ -46,26 +47,27 @@ const HomePage = ({ showNotification, isSuccess, setIsSuccess }) => {
     if (!validateEmail(email)) { showNotification('error', '유효하지 않은 이메일 형식입니다.'); return; }
 
     setLoading(true);
-    // 나중에 이 부분을 자신의 API 주소로 바꾸시면 됩니다.
-    setTimeout(() => {
-      try {
-        const stored = JSON.parse(localStorage.getItem('subscriptions') || '[]');
-        if (stored.some(sub => sub.email === email)) {
-          showNotification('error', '이미 이메일 구독 정보가 존재합니다.');
-          setLoading(false);
-          return;
-        }
-        const newData = { bojId, email, time, count, days: selectedDays, createdAt: new Date().toISOString() };
-        localStorage.setItem('subscriptions', JSON.stringify([...stored, newData]));
-        setSubmittedData(newData);
-        showNotification('success', '구독 신청이 완료되었습니다.');
+
+    const dayToEng = {
+      '월': 'MON', '화': 'TUE', '수': 'WED', '목': 'THU', '금': 'FRI', '토': 'SAT', '일': 'SUN'
+    };
+    const daysInEng = selectedDays.map(day => dayToEng[day]);
+
+    try {
+      const result = await addSubscription({ bojId, email, time, count, days: daysInEng });
+      if (result.success) {
+        const displayData = { ...result.data, days: selectedDays };
+        setSubmittedData(displayData);
+        showNotification('success', result.message);
         setIsSuccess(true);
-      } catch (error) {
-        showNotification('error', '처리 중 오류가 발생했습니다.');
-      } finally {
-        setLoading(false);
+      } else {
+        showNotification('error', result.message);
       }
-    }, 800);
+    } catch (error) {
+      showNotification('error', '처리 중 오류가 발생했습니다.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (isSuccess && submittedData) {
