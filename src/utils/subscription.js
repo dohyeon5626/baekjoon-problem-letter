@@ -5,13 +5,12 @@ const apiClient = axios.create({
 });
 
 export const addSubscription = async (subscriptionData) => {
-  const { bojId, email, time, count, days } = subscriptionData;
+  const { bojId, email, time, days } = subscriptionData;
 
   const payload = {
     userId: bojId,
     email: email,
     sendTime: time,
-    problemCount: parseInt(count.replace('개', ''), 10),
     sendDays: days,
   };
 

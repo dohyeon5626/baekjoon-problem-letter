@@ -9,8 +9,7 @@ import { validateEmail } from '../utils/emailValidator';
 const HomePage = ({ showNotification, isSuccess, setIsSuccess }) => {
   const [bojId, setBojId] = useState('');
   const [email, setEmail] = useState('');
-  const [time, setTime] = useState('09:00'); 
-  const [count, setCount] = useState('3개'); 
+  const [time, setTime] = useState('09:00');
   const [selectedDays, setSelectedDays] = useState(['월', '화', '수', '목', '금']);
   const [loading, setLoading] = useState(false);
   const [submittedData, setSubmittedData] = useState(null);
@@ -24,7 +23,6 @@ const HomePage = ({ showNotification, isSuccess, setIsSuccess }) => {
     const h = hour.toString().padStart(2, '0');
     timeOptions.push(`${h}:00`); timeOptions.push(`${h}:30`);
   }
-  const countOptions = ['1개', '2개', '3개', '4개', '5개'];
 
   useEffect(() => {
     if (!isSuccess && defaultTimeRef.current) {
@@ -54,7 +52,7 @@ const HomePage = ({ showNotification, isSuccess, setIsSuccess }) => {
     const daysInEng = selectedDays.map(day => dayToEng[day]);
 
     try {
-      const result = await addSubscription({ bojId, email, time, count, days: daysInEng });
+      const result = await addSubscription({ bojId, email, time, days: daysInEng });
       if (result.success) {
         const displayData = { ...result.data, days: selectedDays };
         setSubmittedData(displayData);
@@ -78,7 +76,7 @@ const HomePage = ({ showNotification, isSuccess, setIsSuccess }) => {
             <Check className="w-8 h-8 text-emerald-500" strokeWidth={3} />
           </div>
           <h2 className="text-xl md:text-2xl font-black text-slate-900 mb-2">구독 신청 완료!</h2>
-          <p className="text-[13px] md:text-sm text-slate-500 font-medium mb-8 leading-relaxed">설정하신 정보로 매일 아침<br/>엄선된 알고리즘 문제가 배달됩니다.</p>
+          <p className="text-[13px] md:text-sm text-slate-500 font-medium mb-8 leading-relaxed">설정하신 정보로 매일 아침<br/>맞춤 알고리즘 문제가 발송됩니다.</p>
           <div className="w-full bg-slate-50 rounded-2xl p-5 space-y-4 border border-slate-100 text-left">
             <div className="flex justify-between items-center"><span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">백준 ID</span><span className="text-sm font-black text-slate-800">{submittedData.bojId}</span></div>
             <div className="flex justify-between items-center"><span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">수신 메일</span><span className="text-sm font-black text-slate-800 tracking-tight">{submittedData.email}</span></div>
@@ -89,7 +87,6 @@ const HomePage = ({ showNotification, isSuccess, setIsSuccess }) => {
             </div>
             <div className="flex justify-between items-center">
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">문제 개수</span>
-              <span className="text-sm font-black text-emerald-600">{submittedData.count}</span>
             </div>
           </div>
         </div>
@@ -144,16 +141,6 @@ const HomePage = ({ showNotification, isSuccess, setIsSuccess }) => {
               </div>
             </div>
             <p className="text-[10px] text-slate-400 pl-1 leading-relaxed">※ 이메일로 문제가 발송될 시간입니다.</p>
-          </div>
-
-          <div className="space-y-3">
-            <label className="text-[10px] font-black text-slate-700 flex items-center gap-2"><Hash className="w-3.5 h-3.5 text-slate-400" /> 문제 개수</label>
-            <div className="flex gap-2">
-              {countOptions.map((c) => (
-                <button key={c} onClick={() => setCount(c)} className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all border focus:outline-none ${count === c ? 'bg-emerald-600 border-emerald-600 text-white shadow-md scale-105' : 'bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50'}`}>{c}</button>
-              ))}
-            </div>
-            <p className="text-[10px] text-slate-400 pl-1 leading-relaxed">※ 하루에 이메일로 추천받을 문제의 수입니다.</p>
           </div>
 
           <div className="space-y-3">
