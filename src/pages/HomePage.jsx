@@ -140,7 +140,21 @@ const HomePage = ({ showNotification, isSuccess, setIsSuccess }) => {
           </div>
 
           <div className="space-y-3">
-            <label className="text-[10px] font-black text-slate-700 flex items-center gap-2"><Calendar className="w-3.5 h-3.5 text-slate-400" /> 발송 요일</label>
+            <div className="flex justify-between items-center">
+              <label className="text-[10px] font-black text-slate-700 flex items-center gap-2"><Calendar className="w-3.5 h-3.5 text-slate-400" /> 발송 요일</label>
+              <button
+                onClick={() => {
+                  if (selectedDays.length === days.length) {
+                    setSelectedDays([]);
+                  } else {
+                    setSelectedDays(days);
+                  }
+                }}
+                className="text-[10px] text-emerald-600 font-bold hover:opacity-70 transition-opacity focus:outline-none tracking-tight"
+              >
+                {selectedDays.length === days.length ? '전체 해제하기' : '전체 선택하기'}
+              </button>
+            </div>
             <div className="flex flex-wrap gap-2">
               {days.map((day) => (
                 <button key={day} onClick={() => setSelectedDays(prev => prev.includes(day) ? prev.filter(d => d !== day) : [...prev, day])} className={`flex-1 min-w-[42px] py-2.5 rounded-xl font-bold text-[11px] transition-all border focus:outline-none ${selectedDays.includes(day) ? 'bg-emerald-600 border-emerald-600 text-white shadow-sm' : 'bg-white border-slate-200 text-slate-400 hover:border-slate-300 hover:bg-slate-50'}`}>{day}</button>
