@@ -17,6 +17,11 @@ const HomePage = ({ showNotification, isSuccess, setIsSuccess }) => {
   const timeScrollRef = useRef(null);
   const defaultTimeRef = useRef(null);
 
+  const isDraggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const scrollLeftRef = useRef(0);
+  const isDraggedRef = useRef(false);
+
   const days = ['월', '화', '수', '목', '금', '토', '일'];
   const timeOptions = [];
   for (let hour = 6; hour <= 23; hour++) {
@@ -65,6 +70,38 @@ const HomePage = ({ showNotification, isSuccess, setIsSuccess }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleDragStart = (e) => {
+    const slider = timeScrollRef.current;
+    if (!slider) return;
+    isDraggingRef.current = true;
+    isDraggedRef.current = false;
+    startXRef.current = e.pageX - slider.offsetLeft;
+    scrollLeftRef.current = slider.scrollLeft;
+    slider.style.scrollSnapType = 'none';
+    slider.style.cursor = 'grabbing';
+    slider.style.scrollBehavior = 'auto';
+  };
+
+  const handleDragEnd = () => {
+    const slider = timeScrollRef.current;
+    if (!slider) return;
+    isDraggingRef.current = false;
+    slider.style.scrollSnapType = '';
+    slider.style.cursor = 'grab';
+    slider.style.scrollBehavior = 'smooth';
+  };
+
+  const handleDragMove = (e) => {
+    if (!isDraggingRef.current || !timeScrollRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - timeScrollRef.current.offsetLeft;
+    const walk = x - startXRef.current;
+    if (Math.abs(walk) > 5) { // Threshold to differentiate click from drag
+      isDraggedRef.current = true;
+    }
+    timeScrollRef.current.scrollLeft = scrollLeftRef.current - walk;
   };
 
   if (isSuccess && submittedData) {
@@ -126,9 +163,16 @@ const HomePage = ({ showNotification, isSuccess, setIsSuccess }) => {
                 <div className="w-8 h-full bg-gradient-to-r from-white to-transparent pointer-events-none" />
                 <button onClick={() => handleTimeScroll('left')} className="absolute left-0 w-8 h-8 bg-white border border-slate-200 shadow-sm rounded-full flex items-center justify-center text-slate-500 hover:bg-slate-50 ml-1 active:scale-95 transition-all focus:outline-none"><ChevronLeft className="w-4 h-4" /></button>
               </div>
-              <div ref={timeScrollRef} className="flex overflow-x-auto gap-2 py-1 px-10 hide-scrollbar snap-x scroll-smooth w-full">
+              <div 
+                ref={timeScrollRef} 
+                className="flex overflow-x-auto gap-2 py-1 px-10 hide-scrollbar snap-x scroll-smooth w-full cursor-grab select-none"
+                onMouseDown={handleDragStart}
+                onMouseLeave={handleDragEnd}
+                onMouseUp={handleDragEnd}
+                onMouseMove={handleDragMove}
+              >
                 {timeOptions.map((t) => (
-                  <button key={t} ref={t === '09:00' ? defaultTimeRef : null} onClick={() => setTime(t)} className={`flex-shrink-0 min-w-[75px] py-2.5 rounded-xl text-[11px] font-bold transition-all border snap-center focus:outline-none ${time === t ? 'bg-emerald-600 border-emerald-600 text-white shadow-md scale-105' : 'bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50'}`}>{t}</button>
+                  <button key={t} ref={t === '09:00' ? defaultTimeRef : null} onClick={() => { if (isDraggedRef.current) return; setTime(t); }} className={`flex-shrink-0 min-w-[75px] py-2.5 rounded-xl text-[11px] font-bold transition-all border snap-center focus:outline-none ${time === t ? 'bg-emerald-600 border-emerald-600 text-white shadow-md scale-105' : 'bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50'}`}>{t}</button>
                 ))}
               </div>
               <div className="absolute right-0 z-10 flex items-center h-full">
