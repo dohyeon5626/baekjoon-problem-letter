@@ -16,7 +16,7 @@ export const addSubscription = async (subscriptionData) => {
 
   try {
     await apiClient.post('/subscription', payload);
-    return { success: true, message: '구독 신청이 완료되었습니다.', data: subscriptionData };
+    return { success: true, data: subscriptionData };
   } catch (error) {
     if (error.response) {
       switch (error.response.status) {

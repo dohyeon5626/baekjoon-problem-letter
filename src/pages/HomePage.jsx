@@ -56,7 +56,6 @@ const HomePage = ({ showNotification, isSuccess, setIsSuccess }) => {
       if (result.success) {
         const displayData = { ...result.data, days: selectedDays };
         setSubmittedData(displayData);
-        showNotification('success', result.message);
         setIsSuccess(true);
       } else {
         showNotification('error', result.message);
@@ -84,9 +83,6 @@ const HomePage = ({ showNotification, isSuccess, setIsSuccess }) => {
             <div className="flex justify-between items-center">
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">발송 시간</span>
               <span className="text-sm font-black text-emerald-600">{submittedData.time}</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">문제 개수</span>
             </div>
           </div>
         </div>
