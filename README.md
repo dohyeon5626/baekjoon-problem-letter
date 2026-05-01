@@ -11,5 +11,6 @@
 백준에 등록된 문제들을 사용자의 현재 티어에 맞춰 추천해주는 문제 구독 서비스입니다.<br/>
 주기적으로 유저의 티어를 업데이트하여 문제 난이도를 조절합니다.
 
-[Baekjoon Problem Letter Page](https://baekjoon-problem-letter.dohyeon5626.com)로 이동하면 누구나 백준 문제 추천 구독 서비스를 사용할 수 있습니다.
-> [Serverless Functions](https://github.com/dohyeon5626/serverless-functions/tree/main/baekjoon-problem-letter)와 함께 운영중입니다.
+
+**🚨 백준 서비스 종료에 따라 현재는 서비스를 운영하고 있지 않습니다.**<br/>
+> [Serverless Functions](https://github.com/dohyeon5626/serverless-functions/tree/main/baekjoon-problem-letter%20(archive))에서 서버 코드를 확인해볼 수 있습니다.
